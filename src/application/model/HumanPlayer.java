@@ -10,7 +10,7 @@ public class HumanPlayer implements Player {
     private Marker marker;
     private Scanner scanner;
     private PlayerType playerType;
-    private Move nextMove;
+    private int[] nextMove;
 
     public HumanPlayer(Marker marker) {
         this.marker = marker;
@@ -18,7 +18,7 @@ public class HumanPlayer implements Player {
         this.playerType = PlayerType.HUMAN;
     }
 
-    public void setNextMove(Move move) {
+    public void setNextMove(int[] move) {
         this.nextMove = move;
     }
 
@@ -27,8 +27,8 @@ public class HumanPlayer implements Player {
         Move choice = null;
         ArrayList<Move> candidates = board.getLegalMoves();
 
-        int row = nextMove.getRow();
-        int col = nextMove.getCol();
+        int row = nextMove[0];
+        int col = nextMove[1];
 
         for (Move candidate : candidates) {
             if (candidate.getRow() == row && candidate.getCol() == col) {

@@ -55,7 +55,8 @@ public class StartWindow extends Application {
 
     private void handleTileClick(Tile tile) {
         if (currentPlayer != null && currentPlayer.getType() == PlayerType.HUMAN && gameState == GameState.ONGOING) {
-            humanPlayer.setNextMove(new Move(tile.getRow(), tile.getCol()));
+            int[] move = {tile.getRow(), tile.getCol()};
+            humanPlayer.setNextMove(move);
             Move choice = humanPlayer.selectMove(board);
 
             board.makeMove(choice, humanPlayer.getMarker());
