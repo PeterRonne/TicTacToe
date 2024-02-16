@@ -4,6 +4,7 @@ import application.model.enums.Marker;
 import javafx.scene.control.Button;
 
 public class Tile extends Button {
+    public static final int TILE_SIZE = 100;
     private int row;
     private int col;
     private Marker marker;

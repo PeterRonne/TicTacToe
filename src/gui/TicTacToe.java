@@ -17,24 +17,45 @@ import storage.Storage;
 
 import java.util.ArrayList;
 
-public class StartWindow extends Application {
+public class TicTacToe extends Application {
+
+    private SettingsInputDialog dia;
+    private BorderPane pane = new BorderPane();
+    private Stage primaryStage = new Stage();
+
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage stage) throws Exception {
 
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.setResizable(false);
 
-        BorderPane pane = new BorderPane();
+        int defaultBoardSize = 3;
+        primaryStage.setWidth(defaultBoardSize * Tile.TILE_SIZE + 35);
+        primaryStage.setHeight(defaultBoardSize * Tile.TILE_SIZE + 80);
+
         this.initContent(pane);
 
         Scene scene = new Scene(pane);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        dia = new SettingsInputDialog(primaryStage);
     }
 
+    private void updateBoardSize(double windowSize) {
+        int newSize = calculateBoardSize(windowSize);
+    }
+
+    // Calculate the Tic Tac Toe board size based on the window size
+    private int calculateBoardSize(double windowSize) {
+        // You can customize this calculation based on your requirements
+        return Math.max(3, (int) (windowSize / 100));
+    }
+
+    private int boardSize = 3;
     private GameBoard guiBoard;
     private GameState gameState = GameState.ONGOING;
-    private Board board = new Board(3);
+    private Board board = new Board(boardSize);
     private MenuBar menuBar;
     private CheckMenuItem suggestMoves;
     private HumanPlayer humanPlayer = new HumanPlayer(Marker.X);
@@ -49,7 +70,7 @@ public class StartWindow extends Application {
         pane.setTop(menuBar);
 
         guiBoard = new GameBoard(3, this::handleTileClick);  // Pass the method reference
-        guiBoard.initialize();
+        guiBoard.initialize(3);
         pane.setRight(guiBoard);
     }
 
@@ -94,7 +115,7 @@ public class StartWindow extends Application {
 
     private void resetGameBoard() {
         board.reset();
-        guiBoard.initialize();
+        guiBoard.initialize(boardSize);
         this.gameState = GameState.ONGOING;
         this.currentPlayer = humanPlayer;
         if (suggestMoves.isSelected()) {
@@ -119,6 +140,10 @@ public class StartWindow extends Application {
         }
     }
 
+    public void setBoardSize(int boardSize) {
+        this.boardSize = boardSize;
+    }
+
     public void initMenuBar() {
         // Menu 1 Opponents:
         Menu opponents = new Menu("Bots");
@@ -126,45 +151,58 @@ public class StartWindow extends Application {
         MenuItem randomBot = new MenuItem("RadomBot");
         randomBot.setOnAction(event -> {
             this.botPlayer = bots.get(0);
-            System.out.println(botPlayer);
         });
         opponents.getItems().add(randomBot);
         // onlayerbot bot
         MenuItem oneLayerBot = new MenuItem("OneLayerBot");
         oneLayerBot.setOnAction(event -> {
             this.botPlayer = bots.get(1);
-            System.out.println(botPlayer);
         });
         opponents.getItems().add(oneLayerBot);
         // twolayer bot
         MenuItem twoLayerBot = new MenuItem("TwoLayerBot");
         twoLayerBot.setOnAction(event -> {
             this.botPlayer = bots.get(2);
-            System.out.println(botPlayer);
         });
         opponents.getItems().add(twoLayerBot);
         // minimax bot
         MenuItem minimaxBot = new MenuItem("MiniMaxBot");
         minimaxBot.setOnAction(event -> {
             this.botPlayer = bots.get(3);
-            System.out.println(botPlayer);
         });
         opponents.getItems().add(minimaxBot);
 
         // Menu 2
         Menu gameControl = new Menu("Game Control");
         MenuItem startGame = new MenuItem("New Game");
-        startGame.setOnAction(event -> {
-            resetGameBoard();
-        });
+        startGame.setOnAction(event -> resetGameBoard());
         gameControl.getItems().add(startGame);
 
+        MenuItem settings = new MenuItem("Settings");
+        settings.setOnAction(event -> updateSettings());
+        gameControl.getItems().add(settings);
+
         suggestMoves = new CheckMenuItem("Suggest moves");
-        suggestMoves.setOnAction(event -> {
-            suggestMove();
-        });
+        suggestMoves.setOnAction(event -> suggestMove());
         gameControl.getItems().add(suggestMoves);
 
         menuBar = new MenuBar(opponents, gameControl);
+    }
+
+    public void updateSettings() {
+        dia.showAndWait();
+
+        int newBoardSize = dia.getBoardSize();
+        primaryStage.setWidth(newBoardSize * Tile.TILE_SIZE + 35);
+        primaryStage.setHeight(newBoardSize * Tile.TILE_SIZE + 80);
+
+        // Check if the new size is different from the current size
+        if (newBoardSize != boardSize) {
+            this.setBoardSize(newBoardSize);
+            guiBoard.initialize(newBoardSize);
+            board.setDimension(newBoardSize);
+            initContent(pane);
+            resetGameBoard();
+        }
     }
 }

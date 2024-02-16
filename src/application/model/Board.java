@@ -163,6 +163,10 @@ public class Board {
         return dimension;
     }
 
+    public void setDimension(int dimension) {
+        this.dimension = dimension;
+        reset();
+    }
 
     public void reset() {
         this.grid = new Marker[dimension][dimension];

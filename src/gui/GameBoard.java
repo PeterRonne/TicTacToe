@@ -17,15 +17,16 @@ public class GameBoard extends GridPane {
 
 
     public GameBoard(int dimension, Consumer<Tile> tileClickHandler) {
-        this.dimension = dimension;
-        this.tiles = new Tile[dimension][dimension];
+
         MarkerToChar.put(null, ' ');
         MarkerToChar.put(Marker.X, 'X');
         MarkerToChar.put(Marker.O, 'O');
         this.tileClickHandler = tileClickHandler;  // Initialize tileClickHandler
     }
 
-    public void initialize() {
+    public void initialize(int dimension) {
+        this.dimension = dimension;
+        this.tiles = new Tile[dimension][dimension];
         for (int row = 0; row < dimension; row++) {
             for (int col = 0; col < dimension; col++) {
                 Tile tile = createTile(row, col);
@@ -38,10 +39,10 @@ public class GameBoard extends GridPane {
 
     private Tile createTile(int row, int col) {
         Tile tile = new Tile(row, col);
-        tile.setPrefSize(100, 100);
+        tile.setPrefSize(Tile.TILE_SIZE, Tile.TILE_SIZE);
         tile.setTextAlignment(TextAlignment.CENTER);
         tile.setBaseStyle();
-        
+
         // Add an event handler to the button
         tile.setOnAction(event -> handleTileClick(tile));
 
@@ -169,4 +170,6 @@ public class GameBoard extends GridPane {
     public Tile getTileAt(int row, int col) {
         return tiles[row][col];
     }
+
+
 }
