@@ -1,17 +1,14 @@
 package application.model;
 
-import application.model.enums.Marker;
-
 import java.util.*;
 
 public class Board {
-    private int dimension;
+    private int dimension = 3;
     private ArrayList<Move> moves = new ArrayList<>();
     private Marker[][] grid;
     private HashMap<Marker, Character> MarkerToChar = new HashMap<>();
 
-    public Board(int dimension) {
-        this.dimension = dimension;
+    public Board() {
         this.grid = new Marker[dimension][dimension];
         MarkerToChar.put(null, '.');
         MarkerToChar.put(Marker.X, 'X');

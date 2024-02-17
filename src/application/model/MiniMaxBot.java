@@ -1,27 +1,20 @@
 package application.model;
 
-import application.model.enums.Marker;
-import application.model.enums.PlayerType;
-
 import java.util.ArrayList;
 
-public class MiniMaxBot implements Player {
-
-    private Marker marker;
-    private PlayerType playerType;
+public class MiniMaxBot extends Player {
     private final int MAX_DEPTH = 8;
 
     public MiniMaxBot(Marker marker) {
-        this.marker = marker;
-        this.playerType = PlayerType.BOT; 
+        super(marker);
     }
 
     @Override
     public Move selectMove(Board board) {
         boolean ismax = false;
-        if (marker == Marker.X)
+        if (super.getMarker() == Marker.X)
             ismax = true;
-        return minimax(board, ismax, marker, 0);
+        return minimax(board, ismax, super.getMarker(), 0);
     }
 
     private Move minimax(Board board, boolean isMax, Marker currentPlayer, int depth) {
@@ -75,14 +68,4 @@ public class MiniMaxBot implements Player {
         return score;
     }
 
-
-    @Override
-    public Marker getMarker() {
-        return marker;
-    }
-
-    @Override
-    public PlayerType getType() {
-        return playerType;
-    }
 }

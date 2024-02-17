@@ -1,8 +1,9 @@
-package application.model.enums;
+package application.model;
 
 public enum Marker {
     X(1),
-    O(2);
+    O(2),
+    EMPTY(0);
 
     private final int value;
 

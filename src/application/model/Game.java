@@ -1,46 +1,43 @@
 package application.model;
 
-import application.model.enums.GameState;
-
 import java.util.ArrayList;
 
 public class Game {
     private Board board;
-    private GameState gameState;
-    private final ArrayList<Player> players = new ArrayList<>();
+    private Player player1;
+    private Player player2;
+    private Player currentPlayer;
 
-    public Game(Board board) {
-        this.gameState = GameState.NOT_STARTED;
+    public Game(Board board,Player player1, Player player2) {
         this.board = board;
-    }
-
-
-    public void addPlayer(Player player) {
-        if (!players.contains(player)) {
-            players.add(player);
-        }
-    }
-
-    public void removePlayer(Player player) {
-        if (players.contains(player)) {
-            players.remove(player);
-        }
-    }
-
-    public int getBoardDimension() {
-        return board.getDimension();
+        this.player1 = player1;
+        this.player2 = player2;
+        this.currentPlayer = player1;
     }
 
     public Board getBoard() {
         return board;
     }
 
-    public GameState getGameState() {
-        return gameState;
+    public void playGame() {
+        while (!board.isGameOver()) {
+
+            board.print();
+
+            Move choice = currentPlayer.selectMove(board);
+            board.makeMove(choice, currentPlayer.getMarker());
+
+            if (board.hasWinner() == currentPlayer.getMarker()) {
+                board.print();
+                System.out.println("Congratulations to player " + currentPlayer.getMarker() + " you win!!!");
+            }
+
+            switchPlayer();
+        }
     }
 
-    public ArrayList<Player> getPlayers() {
-        return players;
+    private void switchPlayer() {
+        currentPlayer = (currentPlayer == player1) ? player2 : player1;
     }
 
 

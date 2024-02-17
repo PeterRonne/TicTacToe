@@ -1,12 +1,15 @@
 package application.model;
 
-import application.model.enums.Marker;
-import application.model.enums.PlayerType;
+public abstract class Player {
+    private Marker marker;
 
-public interface Player {
-    public Move selectMove(Board board);
+    public Player(Marker marker) {
+        this.marker = marker;
+    }
 
-    public Marker getMarker();
+    public abstract Move selectMove(Board board);
 
-    public PlayerType getType();
+    public Marker getMarker() {
+        return marker;
+    }
 }
