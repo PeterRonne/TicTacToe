@@ -4,12 +4,15 @@ import java.util.*;
 
 public class Board {
     private int dimension = 3;
-    private ArrayList<Move> moves = new ArrayList<>();
+    private ArrayList<Move> playedMoves = new ArrayList<>();
+//    private ArrayList<Move> legalMoves;
     private Marker[][] grid;
     private HashMap<Marker, Character> MarkerToChar = new HashMap<>();
 
     public Board() {
         this.grid = new Marker[dimension][dimension];
+//        this.legalMoves = this.setLegalMoves();
+
         MarkerToChar.put(null, '.');
         MarkerToChar.put(Marker.X, 'X');
         MarkerToChar.put(Marker.O, 'O');
@@ -28,9 +31,9 @@ public class Board {
         }
 
         // Deep copy for the moves
-        this.moves = new ArrayList<>(original.moves.size());
-        for (Move move : original.moves) {
-            this.moves.add(new Move(move.getRow(), move.getCol()));
+        this.playedMoves = new ArrayList<>(original.playedMoves.size());
+        for (Move move : original.playedMoves) {
+            this.playedMoves.add(new Move(move.getRow(), move.getCol()));
         }
     }
 
@@ -50,7 +53,7 @@ public class Board {
 
     public Marker hasWinner() {
         // No winner can be found before (dimension * 2 - 1) moves have been played. That would be 5 moves if the boards dimension is 3.
-        if (moves.size() < dimension * 2 - 1) {
+        if (playedMoves.size() < dimension * 2 - 1) {
             return null;
         }
 
@@ -108,17 +111,17 @@ public class Board {
     }
 
     public boolean isGameOver() {
-        if (hasWinner() != null || moves.size() == dimension * dimension) {
+        if (hasWinner() != null || playedMoves.size() == dimension * dimension) {
             return true;
         } else {
             return false;
         }
     }
 
-    public void makeMove(Move move, Marker marker) throws RuntimeException{
+    public void makeMove(Move move, Marker marker) throws RuntimeException {
         if (isEmpty(move.getRow(), move.getCol())) {
             grid[move.getRow()][move.getCol()] = marker;
-            moves.add(move);
+            playedMoves.add(move);
         } else {
             throw new RuntimeException("Attemting to move onto already occupied square");
         }
@@ -136,12 +139,26 @@ public class Board {
         return legalMoves;
     }
 
+    //** Maybe change to this, so the moves are only created once **//
+    //** and then removed from the legal moves list once the move have been played **//
+//    public ArrayList<Move> setLegalMoves() {
+//        ArrayList<Move> legalMoves = new ArrayList<>();
+//        for (int row = 0; row < dimension; row++) {
+//            for (int col = 0; col < dimension; col++) {
+//                if (isEmpty(row, col)) {
+//                    legalMoves.add(new Move(row, col));
+//                }
+//            }
+//        }
+//        return legalMoves;
+//    }
+
     public Marker getMarkAt(int row, int col) {
         return grid[row][col];
     }
 
     public Move lastMove() {
-        return moves.get(moves.size()-1);
+        return playedMoves.get(playedMoves.size() - 1);
     }
 
     public boolean isEmpty(int row, int col) {
@@ -152,8 +169,8 @@ public class Board {
         return grid;
     }
 
-    public ArrayList<Move> getMoves() {
-        return moves;
+    public ArrayList<Move> getPlayedMoves() {
+        return playedMoves;
     }
 
     public int getDimension() {
@@ -167,6 +184,6 @@ public class Board {
 
     public void reset() {
         this.grid = new Marker[dimension][dimension];
-        this.moves = new ArrayList<>();
+        this.playedMoves = new ArrayList<>();
     }
 }
