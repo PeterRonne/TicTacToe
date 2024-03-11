@@ -23,10 +23,7 @@ public class TicTacToe extends Application {
     }
 
     private void initContent(BorderPane pane) {
-
         pane.setCenter(GameBoard());
-
-
     }
 
     private GridPane GameBoard() {
