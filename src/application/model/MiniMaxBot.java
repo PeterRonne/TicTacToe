@@ -23,6 +23,7 @@ public class MiniMaxBot extends Player {
             boardEval = evaluate(board, depth);
             Move bestMove = board.lastMove();
             bestMove.setValue(boardEval);
+            super.addSelectedMove(bestMove);
             return bestMove;
         }
 

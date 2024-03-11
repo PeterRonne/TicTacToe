@@ -1,5 +1,7 @@
 package gui;
 
+import application.controllers.GameController;
+import application.model.Move;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +11,11 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class TicTacToe extends Application {
+
+    private GameController gameController = new GameController();
+    private GridPane gameBoard;
+    private Tile[][] tiles = new Tile[3][3];
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Tic Tac Toe");
@@ -23,15 +30,17 @@ public class TicTacToe extends Application {
     }
 
     private void initContent(BorderPane pane) {
-        pane.setCenter(GameBoard());
+        gameBoard = createGameBoard();
+        pane.setCenter(gameBoard);
     }
 
-    private GridPane GameBoard() {
+    private GridPane createGameBoard() {
         GridPane gameBoard = new GridPane();
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 Tile tile = new Tile(row, col, this::handleTileClick);
                 gameBoard.add(tile, row, col);
+                tiles[row][col] = tile;
             }
         }
         return gameBoard;
@@ -42,10 +51,16 @@ public class TicTacToe extends Application {
         Tile clickedTile = (Tile) actionEvent.getSource();
 
         // Retrieve the row and column information from the clicked Tile
-        int clickedRow = clickedTile.getRow();
         int clickedCol = clickedTile.getCol();
+        int clickedRow = clickedTile.getRow();
+
+        Move playedMove = gameController.playMove(clickedRow, clickedCol);
+        if (playedMove != null) {
+            tiles[playedMove.getRow()][playedMove.getCol()].setMarker(gameController.getCurrentPlayer().getMarker());
+        }
 
         System.out.println("Button clicked at row: " + clickedRow + ", column: " + clickedCol);
+        gameController.switchPlayer();
     }
 
 

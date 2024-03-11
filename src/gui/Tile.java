@@ -17,22 +17,19 @@ public class Tile extends Button {
         this.col = col;
         this.marker = null;
         this.setPrefSize(TILE_SIZE, TILE_SIZE);
+        setBaseStyle();
         this.setOnAction(action);
     }
 
     public void setMarker(Marker marker) {
         this.marker = marker;
-    }
-
-    public void update(Marker marker) {
-        this.marker = marker;
         this.setText("" + marker);
         this.setOnAction(null);
     }
 
-//    public void setBaseStyle() {
-//        this.setStyle("-fx-font-size:45; -fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-width: 2px; -fx-border-radius: 0px;");
-//    }
+    public void setBaseStyle() {
+        this.setStyle("-fx-font-size:45; -fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-width: 2px; -fx-border-radius: 0px;");
+    }
 //
 //    public void setWinningStyle() {
 //        this.setStyle("-fx-font-size:45; -fx-background-color: #7AE582; -fx-border-color: #000000; -fx-border-width: 2px; -fx-border-radius: 0px;");

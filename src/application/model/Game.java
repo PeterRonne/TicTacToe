@@ -1,7 +1,5 @@
 package application.model;
 
-import java.util.ArrayList;
-
 public class Game {
     private Board board;
     private Player player1;
@@ -36,9 +34,32 @@ public class Game {
         }
     }
 
-    private void switchPlayer() {
-        currentPlayer = (currentPlayer == player1) ? player2 : player1;
+    public Move playMoveForCurrentPlayer(int row, int col) {
+        Move move = null;
+        if (currentPlayer instanceof HumanPlayer) {
+            HumanPlayer humanPlayer = (HumanPlayer) currentPlayer;
+            humanPlayer.nextMove(row, col);
+            move = currentPlayer.selectMove(board);
+        } else {
+            move = currentPlayer.selectMove(board);
+        }
+        return move;
     }
 
 
+    public void switchPlayer() {
+        currentPlayer = (currentPlayer == player1) ? player2 : player1;
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
 }

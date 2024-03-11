@@ -11,6 +11,13 @@ public class Move {
         this.value = 0;
     }
 
+    public int[] getMoveAsArray() {
+        int[] move = new int[2];
+        move[0] = getCol();
+        move[1] = getRow();
+        return move;
+    }
+
     public int getRow() {
         return row;
     }

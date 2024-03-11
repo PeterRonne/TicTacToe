@@ -4,57 +4,57 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class HumanPlayer extends Player {
-    private Scanner scanner;
-    private int[] nextMove;
+//    private Scanner scanner;
+    private int[] selectedMove = new int[2];
 
     public HumanPlayer(Marker marker) {
         super(marker);
-
     }
 
-    public void setNextMove(int[] move) {
-        this.nextMove = move;
+    public void nextMove(int row, int col) {
+        selectedMove[0] = row;
+        selectedMove[1] = col;
+    }
+
+    @Override
+    public Move selectMove(Board board) {
+        Move choice = null;
+        ArrayList<Move> candidates = board.getLegalMoves();
+        int row = selectedMove[0];
+        int col = selectedMove[1];
+        for (Move candidate : candidates) {
+            if (row == candidate.getRow() && col == candidate.getCol()) {
+                choice = candidate;
+                super.addSelectedMove(choice);
+            }
+        }
+        return choice;
     }
 
 
     //------------------------------------------------------------------------------//
     // for test purposses only
-    @Override
-    public Move selectMove(Board board) {
-        Move choice = null;
-        ArrayList<Move> candidates = board.getLegalMoves();
-        scanner = new Scanner(System.in);
-        do {
-            System.out.println("pick a col");
-            int col = scanner.nextInt();
-
-            System.out.println("pick a row");
-            int row = scanner.nextInt();
-
-            for (Move candidate : candidates) {
-                if (col == candidate.getCol() && row == candidate.getRow()) {
-                    choice = candidate;
-                }
-            }
-
-        } while (choice == null);
-
-        return choice;
-    }
-    //------------------------------------------------------------------------------//
 //    @Override
 //    public Move selectMove(Board board) {
 //        Move choice = null;
 //        ArrayList<Move> candidates = board.getLegalMoves();
+//        scanner = new Scanner(System.in);
+//        do {
+//            System.out.println("pick a col");
+//            int col = scanner.nextInt();
 //
-//        int row = nextMove[0];
-//        int col = nextMove[1];
+//            System.out.println("pick a row");
+//            int row = scanner.nextInt();
 //
-//        for (Move candidate : candidates) {
-//            if (candidate.getRow() == row && candidate.getCol() == col) {
-//                choice = candidate;
+//            for (Move candidate : candidates) {
+//                if (col == candidate.getCol() && row == candidate.getRow()) {
+//                    choice = candidate;
+//                }
 //            }
-//        }
+//
+//        } while (choice == null);
+//
 //        return choice;
 //    }
+    //------------------------------------------------------------------------------//
 }
