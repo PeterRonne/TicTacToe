@@ -47,14 +47,12 @@ public class TicTacToe extends Application {
     }
 
     private void handleTileClick(ActionEvent actionEvent) {
-        // Retrieve the source of the event, which should be the Tile button
         Tile clickedTile = (Tile) actionEvent.getSource();
 
-        // Retrieve the row and column information from the clicked Tile
         int clickedCol = clickedTile.getCol();
         int clickedRow = clickedTile.getRow();
 
-        Move playedMove = gameController.playMove(clickedRow, clickedCol);
+        Move playedMove = gameController.playMoveForHumanPlayer(clickedRow, clickedCol);
         if (playedMove != null) {
             tiles[playedMove.getRow()][playedMove.getCol()].setMarker(gameController.getCurrentPlayer().getMarker());
         }

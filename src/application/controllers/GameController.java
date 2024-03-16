@@ -21,10 +21,17 @@ public class GameController {
         return game;
     }
 
-    public Move playMove(int row, int col) {
-        return game.playMoveForCurrentPlayer(row, col);
+//    public Move playMove(int row, int col) {
+//        return game.playMoveForCurrentPlayer(row, col);
+//    }
+
+    public Move playMoveForHumanPlayer(int row, int col) {
+        return game.playMoveForHumanPlayer(row, col);
     }
 
+    public Move playMoveForBotPlayer() {
+        return game.playMoveForBotPlayer();
+    }
 
     public void switchPlayer() {
         game.switchPlayer();

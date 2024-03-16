@@ -34,13 +34,15 @@ public class Game {
         }
     }
 
-    public Move playMoveForCurrentPlayer(int row, int col) {
+    public Move playMoveForBotPlayer() {
+        return currentPlayer.selectMove(board);
+    }
+
+    public Move playMoveForHumanPlayer(int row, int col) {
         Move move = null;
         if (currentPlayer instanceof HumanPlayer) {
             HumanPlayer humanPlayer = (HumanPlayer) currentPlayer;
             humanPlayer.nextMove(row, col);
-            move = currentPlayer.selectMove(board);
-        } else {
             move = currentPlayer.selectMove(board);
         }
         return move;
