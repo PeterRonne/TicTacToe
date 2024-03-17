@@ -4,11 +4,12 @@ import application.controllers.GameController;
 import application.model.Move;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
 
 public class TicTacToe extends Application {
 
@@ -52,14 +53,32 @@ public class TicTacToe extends Application {
         int clickedCol = clickedTile.getCol();
         int clickedRow = clickedTile.getRow();
 
-        Move playedMove = gameController.playMoveForHumanPlayer(clickedRow, clickedCol);
-        if (playedMove != null) {
-            tiles[playedMove.getRow()][playedMove.getCol()].setMarker(gameController.getCurrentPlayer().getMarker());
+        if (!gameController.getGame().isGameOver()) {
+            Move playedMove = gameController.playMoveForHumanPlayer(clickedRow, clickedCol);
+            if (playedMove != null) {
+                tiles[playedMove.getRow()][playedMove.getCol()].setMarker(gameController.getCurrentPlayer().getMarker());
+            }
+            checkForWinningMoves();
         }
 
-        System.out.println("Button clicked at row: " + clickedRow + ", column: " + clickedCol);
         gameController.switchPlayer();
+
+        if (!gameController.getGame().isGameOver()) {
+            Move playedMove = gameController.playMoveForBotPlayer();
+            if (playedMove != null) {
+                tiles[playedMove.getRow()][playedMove.getCol()].setMarker(gameController.getCurrentPlayer().getMarker());
+            }
+            checkForWinningMoves();
+        }
     }
 
+    private void checkForWinningMoves() {
+        ArrayList<Move> winningMoves = gameController.getWinningMoves();
+        if (winningMoves != null) {
+            for (Move winningMove : winningMoves) {
+                tiles[winningMove.getRow()][winningMove.getCol()].setWinningStyle();
+            }
+        }
+    }
 
 }

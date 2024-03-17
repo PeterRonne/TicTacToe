@@ -4,11 +4,22 @@ public class Move {
     private int row;
     private int col;
     private int value;
+    private Marker marker;
+
+    public Marker getMarker() {
+        return marker;
+    }
 
     public Move(int row, int col) {
         this.row = row;
         this.col = col;
         this.value = 0;
+    }
+
+    public Move(int row, int col, Marker marker) {
+        this.row = row;
+        this.col = col;
+        this.marker = marker;
     }
 
     public int[] getMoveAsArray() {
@@ -32,5 +43,10 @@ public class Move {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "{row: " + row + " col:" + col + " " + marker + "}";
     }
 }

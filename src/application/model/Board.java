@@ -5,14 +5,12 @@ import java.util.*;
 public class Board {
     private int dimension = 3;
     private ArrayList<Move> playedMoves = new ArrayList<>();
-//    private ArrayList<Move> legalMoves;
     private Marker[][] grid;
+    private Marker winner = null;
     private HashMap<Marker, Character> MarkerToChar = new HashMap<>();
 
     public Board() {
         this.grid = new Marker[dimension][dimension];
-//        this.legalMoves = this.setLegalMoves();
-
         MarkerToChar.put(null, '.');
         MarkerToChar.put(Marker.X, 'X');
         MarkerToChar.put(Marker.O, 'O');
@@ -51,71 +49,8 @@ public class Board {
         System.out.println();
     }
 
-    public Marker hasWinner() {
-        // No winner can be found before (dimension * 2 - 1) moves have been played. That would be 5 moves if the boards dimension is 3.
-        if (playedMoves.size() < dimension * 2 - 1) {
-            return null;
-        }
-
-        // Check cols for win
-        for (int row = 0; row < dimension; row++) {
-            Set<Marker> uniqueCols = new HashSet<>(Arrays.asList(grid[row]));
-            if (uniqueCols.size() == 1) {
-                Marker marker = uniqueCols.iterator().next();
-
-                if (marker != null) {
-                    return marker;
-                }
-            }
-        }
-
-        // Check rows for win
-        for (int col = 0; col < dimension; col++) {
-            Set<Marker> uniqueRows = new HashSet<>();
-            for (int row = 0; row < dimension; row++) {
-                uniqueRows.add(grid[row][col]);
-            }
-            if (uniqueRows.size() == 1) {
-                Marker marker = uniqueRows.iterator().next();
-                if (marker != null) {
-                    return marker;
-                }
-            }
-        }
-        // check backwards diagonal (top left to bottom right) for win
-        Set<Marker> backwardsDiag = new HashSet<>();
-        for (int i = 0; i < dimension; i++) {
-            backwardsDiag.add(grid[i][i]);
-        }
-
-        if (backwardsDiag.size() == 1) {
-            Marker marker = backwardsDiag.iterator().next();
-            if (marker != null) {
-                return marker;
-            }
-        }
-        // check forwards diagonal (bottom left to top right) for win
-        Set<Marker> forwardsDiag = new HashSet<>();
-        for (int i = dimension - 1, j = 0; i >= 0 && j < dimension; i--, j++) {
-            forwardsDiag.add(grid[i][j]);
-        }
-
-        if (forwardsDiag.size() == 1) {
-            Marker marker = forwardsDiag.iterator().next();
-            if (marker != null) {
-                return marker;
-            }
-        }
-
-        return null;
-    }
-
     public boolean isGameOver() {
-        if (hasWinner() != null || playedMoves.size() == dimension * dimension) {
-            return true;
-        } else {
-            return false;
-        }
+        return getWinner() != null || playedMoves.size() == dimension * dimension;
     }
 
     public void makeMove(Move move, Marker marker) throws RuntimeException {
@@ -139,20 +74,6 @@ public class Board {
         return legalMoves;
     }
 
-    //** Maybe change to this, so the moves are only created once **//
-    //** and then removed from the legal moves list once the move have been played **//
-//    public ArrayList<Move> setLegalMoves() {
-//        ArrayList<Move> legalMoves = new ArrayList<>();
-//        for (int row = 0; row < dimension; row++) {
-//            for (int col = 0; col < dimension; col++) {
-//                if (isEmpty(row, col)) {
-//                    legalMoves.add(new Move(row, col));
-//                }
-//            }
-//        }
-//        return legalMoves;
-//    }
-
     public Marker getMarkAt(int row, int col) {
         return grid[row][col];
     }
@@ -165,25 +86,83 @@ public class Board {
         return grid[row][col] == null;
     }
 
-    public Marker[][] getGrid() {
-        return grid;
-    }
-
     public ArrayList<Move> getPlayedMoves() {
         return playedMoves;
-    }
-
-    public int getDimension() {
-        return dimension;
-    }
-
-    public void setDimension(int dimension) {
-        this.dimension = dimension;
-        reset();
     }
 
     public void reset() {
         this.grid = new Marker[dimension][dimension];
         this.playedMoves = new ArrayList<>();
+    }
+
+    public ArrayList<Move> winningMoves() {
+        // No winner can be found before (dimension * 2 - 1) moves have been played. That would be 5 moves if the boards dimension is 3.
+        if (playedMoves.size() < dimension * 2 - 1) {
+            return null;
+        }
+
+        // winning row
+        for (int row = 0; row < dimension; row++) {
+            ArrayList<Move> winningRow = new ArrayList<>();
+            for (int col = 0; col < dimension; col++) {
+                winningRow.add(new Move(row, col, this.getMarkAt(row, col)));
+            }
+            Marker first = winningRow.get(0).getMarker();
+            boolean allMatch = winningRow.stream().allMatch(move -> move.getMarker() == first);
+
+            if (allMatch && first != null) {
+                winner = first;
+                return winningRow;
+            }
+        }
+
+        // Winning column
+        for (int col = 0; col < dimension; col++) {
+            ArrayList<Move> winningCol = new ArrayList<>();
+            for (int row = 0; row < dimension; row++) {
+                winningCol.add(new Move(row, col, this.getMarkAt(row, col)));
+            }
+            Marker first = winningCol.get(0).getMarker();
+            boolean allMatch = winningCol.stream().allMatch(move -> move.getMarker() == first);
+
+            if (allMatch && first != null) {
+                winner = first;
+                return winningCol;
+            }
+        }
+
+        // check backwards diagonal (top left to bottom right) for win
+        ArrayList<Move> BackwardsDiag = new ArrayList<>();
+        for (int i = 0; i < dimension; i++) {
+            BackwardsDiag.add(new Move(i, i, this.getMarkAt(i, i)));
+        }
+
+        Marker first = BackwardsDiag.get(0).getMarker();
+        boolean allMatch = BackwardsDiag.stream().allMatch(move -> move.getMarker() == first);
+
+        if (allMatch && first != null) {
+            winner = first;
+            return BackwardsDiag;
+        }
+
+        // check forwards diagonal (bottom left to top right) for win
+        ArrayList<Move> forwardsDiag = new ArrayList<>();
+        for (int i = dimension - 1, j = 0; i >= 0 && j < dimension; i--, j++) {
+            forwardsDiag.add(new Move(i, j, this.getMarkAt(i, j)));
+        }
+
+        Marker firstInForwardDiag = forwardsDiag.get(0).getMarker();
+        allMatch = forwardsDiag.stream().allMatch(move -> move.getMarker() == firstInForwardDiag);
+
+        if (allMatch && firstInForwardDiag != null) {
+            winner = firstInForwardDiag;
+            return forwardsDiag;
+        }
+
+        return null;
+    }
+
+    public Marker getWinner() {
+        return winner;
     }
 }

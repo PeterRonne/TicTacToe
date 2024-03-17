@@ -1,7 +1,8 @@
 package application.controllers;
 
 import application.model.*;
-import gui.TicTacToe;
+
+import java.util.ArrayList;
 
 public class GameController {
 
@@ -21,10 +22,6 @@ public class GameController {
         return game;
     }
 
-//    public Move playMove(int row, int col) {
-//        return game.playMoveForCurrentPlayer(row, col);
-//    }
-
     public Move playMoveForHumanPlayer(int row, int col) {
         return game.playMoveForHumanPlayer(row, col);
     }
@@ -39,5 +36,21 @@ public class GameController {
 
     public Player getCurrentPlayer() {
         return game.getCurrentPlayer();
+    }
+
+    public boolean isGameOver() {
+        return game.getBoard().isGameOver();
+    }
+
+    public ArrayList<Move> getWinningMoves() {
+        return game.getBoard().winningMoves();
+    }
+
+    public Marker getWinner() {
+        return game.getBoard().getWinner();
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

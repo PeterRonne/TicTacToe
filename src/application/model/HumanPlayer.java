@@ -32,13 +32,13 @@ public class HumanPlayer extends Player {
     }
 
 
-    //------------------------------------------------------------------------------//
-    // for test purposses only
+//    ------------------------------------------------------------------------------//
+//     for test purposses only
 //    @Override
 //    public Move selectMove(Board board) {
 //        Move choice = null;
 //        ArrayList<Move> candidates = board.getLegalMoves();
-//        scanner = new Scanner(System.in);
+//       Scanner scanner = new Scanner(System.in);
 //        do {
 //            System.out.println("pick a col");
 //            int col = scanner.nextInt();
