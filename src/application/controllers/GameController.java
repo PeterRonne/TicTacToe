@@ -17,7 +17,7 @@ public class GameController {
     public Game newGame() {
         Board board = gameFactory.createBoard();
         Player player1 = gameFactory.createHumanPlayer(Marker.X);
-        Player player2 = gameFactory.createHumanPlayer(Marker.O);
+        Player player2 = gameFactory.createOneLayerBot(Marker.O);
         Game game = gameFactory.createGame(board, player1, player2);
         return game;
     }

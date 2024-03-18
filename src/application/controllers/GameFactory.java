@@ -23,4 +23,9 @@ public class GameFactory {
         return miniMaxBot;
     }
 
+    public Player createOneLayerBot(Marker marker) {
+        Player oneLayerBot = new OneLayerBot(marker);
+        return oneLayerBot;
+    }
+
 }

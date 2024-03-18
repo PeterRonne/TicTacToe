@@ -49,7 +49,6 @@ public class TicTacToe extends Application {
 
     private void handleTileClick(ActionEvent actionEvent) {
         Tile clickedTile = (Tile) actionEvent.getSource();
-
         int clickedCol = clickedTile.getCol();
         int clickedRow = clickedTile.getRow();
 
