@@ -2,7 +2,6 @@ package gui;
 
 import application.model.Marker;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
@@ -25,6 +24,14 @@ public class Tile extends Button {
         this.marker = marker;
         this.setText("" + marker);
         this.setOnAction(null);
+    }
+
+    public void resetTile(EventHandler<ActionEvent> action) {
+        this.marker = null;
+        this.setText("");
+        this.setPrefSize(TILE_SIZE, TILE_SIZE);
+        setBaseStyle();
+        this.setOnAction(action);
     }
 
     public void setBaseStyle() {
@@ -55,4 +62,5 @@ public class Tile extends Button {
     public String toString() {
         return "{" + row + ", " + col + "}";
     }
+
 }

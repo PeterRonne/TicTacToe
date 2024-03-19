@@ -54,7 +54,7 @@ public class MiniMaxBot extends Player {
     }
 
     private int evaluate(Board board, int depth) {
-        Marker winner = board.getWinner();
+        Marker winner = board.hasWinner();
         int score;
         if (winner == Marker.X) {
             // Maximizing player wins

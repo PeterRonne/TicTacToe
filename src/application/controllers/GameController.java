@@ -17,7 +17,7 @@ public class GameController {
     public Game newGame() {
         Board board = gameFactory.createBoard();
         Player player1 = gameFactory.createHumanPlayer(Marker.X);
-        Player player2 = gameFactory.createOneLayerBot(Marker.O);
+        Player player2 = gameFactory.createMiniMaxBot(Marker.O);
         Game game = gameFactory.createGame(board, player1, player2);
         return game;
     }
@@ -42,12 +42,20 @@ public class GameController {
         return game.getBoard().isGameOver();
     }
 
+    public Marker hasWinner() {
+        return game.getBoard().hasWinner();
+    }
+
     public ArrayList<Move> getWinningMoves() {
         return game.getBoard().winningMoves();
     }
 
     public Marker getWinner() {
         return game.getBoard().getWinner();
+    }
+
+    public void resetGame() {
+        game = newGame();
     }
 
     public Game getGame() {

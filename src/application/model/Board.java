@@ -49,8 +49,67 @@ public class Board {
         System.out.println();
     }
 
+    public Marker hasWinner() {
+        // No winner can be found before (dimension * 2 - 1) moves have been played. That would be 5 moves if the boards dimension is 3.
+        if (playedMoves.size() < dimension * 2 - 1) {
+            return null;
+        }
+
+        // Check cols for win
+        for (int row = 0; row < dimension; row++) {
+            Set<Marker> uniqueCols = new HashSet<>(Arrays.asList(grid[row]));
+            if (uniqueCols.size() == 1) {
+                Marker marker = uniqueCols.iterator().next();
+
+                if (marker != null) {
+                    return marker;
+                }
+            }
+        }
+
+        // Check rows for win
+        for (int col = 0; col < dimension; col++) {
+            Set<Marker> uniqueRows = new HashSet<>();
+            for (int row = 0; row < dimension; row++) {
+                uniqueRows.add(grid[row][col]);
+            }
+            if (uniqueRows.size() == 1) {
+                Marker marker = uniqueRows.iterator().next();
+                if (marker != null) {
+                    return marker;
+                }
+            }
+        }
+        // check backwards diagonal (top left to bottom right) for win
+        Set<Marker> backwardsDiag = new HashSet<>();
+        for (int i = 0; i < dimension; i++) {
+            backwardsDiag.add(grid[i][i]);
+        }
+
+        if (backwardsDiag.size() == 1) {
+            Marker marker = backwardsDiag.iterator().next();
+            if (marker != null) {
+                return marker;
+            }
+        }
+        // check forwards diagonal (bottom left to top right) for win
+        Set<Marker> forwardsDiag = new HashSet<>();
+        for (int i = dimension - 1, j = 0; i >= 0 && j < dimension; i--, j++) {
+            forwardsDiag.add(grid[i][j]);
+        }
+
+        if (forwardsDiag.size() == 1) {
+            Marker marker = forwardsDiag.iterator().next();
+            if (marker != null) {
+                return marker;
+            }
+        }
+
+        return null;
+    }
+
     public boolean isGameOver() {
-        return getWinner() != null || playedMoves.size() == dimension * dimension;
+        return hasWinner() != null || playedMoves.size() == dimension * dimension;
     }
 
     public void makeMove(Move move, Marker marker) throws RuntimeException {
