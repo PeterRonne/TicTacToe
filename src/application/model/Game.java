@@ -68,17 +68,25 @@ public class Game {
         while (!board.isGameOver()) {
 
             board.print();
+            Move choice = null;
+            if (currentPlayer instanceof HumanPlayer) {
+                HumanPlayer humanPlayer = (HumanPlayer) currentPlayer;
+                choice = humanPlayer.selectMoveTest(board);
+            } else {
+                choice = currentPlayer.selectMove(board);
+            }
 
-            Move choice = currentPlayer.selectMove(board);
             board.makeMove(choice, currentPlayer.getMarker());
 
-            if (board.getWinner() == currentPlayer.getMarker()) {
-                board.print();
+            if (board.hasWinner() == currentPlayer.getMarker()) {
                 System.out.println("Congratulations to player " + currentPlayer.getMarker() + " you win!!!");
             }
 
             switchPlayer();
         }
+        if (board.hasWinner() == null)
+            System.out.println("It's a draw...");
+        board.print();
     }
 
     public boolean isGameOver() {

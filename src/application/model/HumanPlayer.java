@@ -34,28 +34,27 @@ public class HumanPlayer extends Player {
 
 //    ------------------------------------------------------------------------------//
 //     for test purposses only
-//    @Override
-//    public Move selectMove(Board board) {
-//        Move choice = null;
-//        ArrayList<Move> candidates = board.getLegalMoves();
-//       Scanner scanner = new Scanner(System.in);
-//        do {
-//            System.out.println("pick a col");
-//            int col = scanner.nextInt();
-//
-//            System.out.println("pick a row");
-//            int row = scanner.nextInt();
-//
-//            for (Move candidate : candidates) {
-//                if (col == candidate.getCol() && row == candidate.getRow()) {
-//                    choice = candidate;
-//                }
-//            }
-//
-//        } while (choice == null);
-//
-//        return choice;
-//    }
+    public Move selectMoveTest(Board board) {
+        Move choice = null;
+        ArrayList<Move> candidates = board.getLegalMoves();
+       Scanner scanner = new Scanner(System.in);
+        do {
+            System.out.println("pick a col");
+            int col = scanner.nextInt();
+
+            System.out.println("pick a row");
+            int row = scanner.nextInt();
+
+            for (Move candidate : candidates) {
+                if (col == candidate.getCol() && row == candidate.getRow()) {
+                    choice = candidate;
+                }
+            }
+
+        } while (choice == null);
+
+        return choice;
+    }
     //------------------------------------------------------------------------------//
 
 
