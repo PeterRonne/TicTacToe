@@ -22,4 +22,6 @@ public abstract class Player {
     public Marker getMarker() {
         return marker;
     }
+
+
 }

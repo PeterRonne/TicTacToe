@@ -57,4 +57,10 @@ public class HumanPlayer extends Player {
 //        return choice;
 //    }
     //------------------------------------------------------------------------------//
+
+
+    @Override
+    public String toString() {
+        return "HumanPlayer " + super.getMarker();
+    }
 }

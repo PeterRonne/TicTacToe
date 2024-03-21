@@ -1,6 +1,7 @@
 package gui;
 
 import application.controllers.GameController;
+import application.model.HumanPlayer;
 import application.model.Marker;
 import application.model.Move;
 import javafx.animation.KeyFrame;
@@ -25,6 +26,7 @@ public class TicTacToe extends Application {
 
     private GameController gameController = new GameController();
     private SettingsWindow settingsWindow;
+    private Label currentPlayerLabel;
     private GridPane gameBoard;
     private BorderPane pane;
     private Tile[][] tiles = new Tile[3][3];
@@ -63,6 +65,13 @@ public class TicTacToe extends Application {
         menuBar.setAlignment(Pos.BASELINE_RIGHT);
         pane.setTop(menuBar);
 
+
+        currentPlayerLabel = new Label("" + gameController.getCurrentPlayer());
+        HBox box = new HBox(currentPlayerLabel);
+        box.setPadding(new Insets(0, 10, 10, 10));
+        box.setAlignment(Pos.BASELINE_CENTER);
+        pane.setBottom(box);
+
         playAiWithDelay();
     }
 
@@ -70,7 +79,15 @@ public class TicTacToe extends Application {
         settingsWindow.showAndWait();
 
         if (settingsWindow.isApplyNewSettings()) {
-            System.out.println("New settings have been applied");
+            String playerOneType = settingsWindow.getPlayerOneType();
+            Marker playerOneMarker = settingsWindow.getPlayerOneMarker();
+
+            String playerTwoType = settingsWindow.getPlayerTwoType();
+            Marker playerTwoMarker = settingsWindow.getPlayerTwoMarker();
+            gameController.setGame(gameController.newGame(playerOneType, playerOneMarker, playerTwoType, playerTwoMarker));
+            startNewGame();
+            currentPlayerLabel.setText("" + gameController.getCurrentPlayer());
+            System.out.println(gameController.getGame());
         }
     }
 
@@ -94,6 +111,11 @@ public class TicTacToe extends Application {
         playAiWithDelay();
     }
 
+    private void switchPlayer() {
+        gameController.switchPlayer();
+        currentPlayerLabel.setText("" + gameController.getCurrentPlayer());
+    }
+
     private void playAi() {
         if (!gameController.isGameOver()) {
             Move playedMove = gameController.playMoveForBotPlayer();
@@ -102,13 +124,16 @@ public class TicTacToe extends Application {
                 if (gameController.hasWinner() != null) {
                     showWinningTiles();
                 }
-                gameController.switchPlayer();
+                switchPlayer();
+            }
+            if (!(gameController.getCurrentPlayer() instanceof HumanPlayer)) {
+                playAiWithDelay();
             }
         }
     }
 
     private void playAiWithDelay() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.3), event -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
         }));
         timeline.setOnFinished(event -> {
             Platform.runLater(() -> {
@@ -119,6 +144,19 @@ public class TicTacToe extends Application {
             });
         });
         timeline.play();
+    }
+
+    private void playMoveForHumanPlayer(int clickedRow, int clickedCol) {
+        if (!gameController.isGameOver()) {
+            Move playedMove = gameController.playMoveForHumanPlayer(clickedRow, clickedCol);
+            if (playedMove != null) {
+                tiles[playedMove.getRow()][playedMove.getCol()].setMarker(gameController.getCurrentPlayer().getMarker());
+                if (gameController.hasWinner() != null) {
+                    showWinningTiles();
+                }
+                switchPlayer();
+            }
+        }
     }
 
     private void displayGameOverMessage() {
@@ -149,20 +187,6 @@ public class TicTacToe extends Application {
             }
         }
         playAiWithDelay();
-    }
-
-
-    private void playMoveForHumanPlayer(int clickedRow, int clickedCol) {
-        if (!gameController.isGameOver()) {
-            Move playedMove = gameController.playMoveForHumanPlayer(clickedRow, clickedCol);
-            if (playedMove != null) {
-                tiles[playedMove.getRow()][playedMove.getCol()].setMarker(gameController.getCurrentPlayer().getMarker());
-                if (gameController.hasWinner() != null) {
-                    showWinningTiles();
-                }
-                gameController.switchPlayer();
-            }
-        }
     }
 
     private void showWinningTiles() {

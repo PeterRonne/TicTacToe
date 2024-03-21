@@ -224,4 +224,9 @@ public class Board {
     public Marker getWinner() {
         return winner;
     }
+
+    @Override
+    public String toString() {
+        return "Board = " + dimension + " X " + dimension;
+    }
 }

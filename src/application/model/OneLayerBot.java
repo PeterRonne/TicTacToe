@@ -33,4 +33,8 @@ public class OneLayerBot extends Player {
         return marker;
     }
 
+    @Override
+    public String toString() {
+        return "OneLayerBot " + super.getMarker();
+    }
 }

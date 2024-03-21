@@ -69,4 +69,8 @@ public class MiniMaxBot extends Player {
         return score;
     }
 
+    @Override
+    public String toString() {
+        return "MiniMaxBot " + super.getMarker() ;
+    }
 }

@@ -45,7 +45,7 @@ public class SettingsWindow extends Stage {
         pane.setHgap(50);
         pane.setVgap(10);
 
-        String Players[] = {"Human", "OneLayerBot", "MinimaxBot"};
+        String Players[] = {"Human", "OneLayerBot", "MiniMaxBot"};
         Marker markers[] = {Marker.X, Marker.O};
 
         //Player One
@@ -75,6 +75,13 @@ public class SettingsWindow extends Stage {
         playerOneMarkers.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 playerOneMarker = playerOneMarkers.getSelectionModel().getSelectedItem();
+
+                if (playerOneMarker == playerTwoMarker) {
+                    if (playerOneMarker == Marker.X)
+                        playerTwoMarkers.getSelectionModel().selectNext();
+                    else
+                        playerTwoMarkers.getSelectionModel().selectPrevious();
+                }
             }
         }));
 
@@ -107,6 +114,13 @@ public class SettingsWindow extends Stage {
         playerTwoMarkers.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 playerTwoMarker = playerTwoMarkers.getSelectionModel().getSelectedItem();
+
+                if (playerTwoMarker == playerOneMarker) {
+                    if (playerTwoMarker == Marker.X)
+                        playerOneMarkers.getSelectionModel().selectNext();
+                    else
+                        playerOneMarkers.getSelectionModel().selectPrevious();
+                }
             }
         }));
 
