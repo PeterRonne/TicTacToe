@@ -16,8 +16,8 @@ public class GameController {
 
     public Game newGame() {
         Board board = gameFactory.createBoard();
-        Player player1 = gameFactory.createHumanPlayer(Marker.X);
-        Player player2 = gameFactory.createMiniMaxBot(Marker.O);
+        Player player1 = gameFactory.createOneLayerBot(Marker.X);
+        Player player2 = gameFactory.createHumanPlayer(Marker.O);
         Game game = gameFactory.createGame(board, player1, player2);
         return game;
     }
@@ -60,5 +60,9 @@ public class GameController {
 
     public Game getGame() {
         return game;
+    }
+
+    public Move getBestMove() {
+        return game.getBestMove();
     }
 }

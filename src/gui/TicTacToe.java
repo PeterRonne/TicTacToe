@@ -9,21 +9,22 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.function.ToDoubleBiFunction;
 
 public class TicTacToe extends Application {
 
     private GameController gameController = new GameController();
+    private SettingsWindow settingsWindow;
     private GridPane gameBoard;
     private BorderPane pane;
     private Tile[][] tiles = new Tile[3][3];
@@ -39,11 +40,38 @@ public class TicTacToe extends Application {
         Scene scene = new Scene(pane);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        settingsWindow = new SettingsWindow(primaryStage);
     }
 
     private void initContent(BorderPane pane) {
         gameBoard = createGameBoard();
+        gameBoard.setPadding(new Insets(10));
+        gameBoard.setHgap(5);
+        gameBoard.setVgap(5);
+        gameBoard.setCache(true);
         pane.setCenter(gameBoard);
+
+        Button showMove = new Button("Show move");
+        showMove.setOnAction(event -> showMove());
+        Button settings = new Button("Settings");
+        settings.setOnAction(event -> openSettingsMenu());
+
+        HBox menuBar = new HBox(85, showMove, new Region(), settings);
+
+        menuBar.setPadding(new Insets(0, 10, 0, 10));
+        menuBar.setAlignment(Pos.BASELINE_RIGHT);
+        pane.setTop(menuBar);
+
+        playAiWithDelay();
+    }
+
+    private void openSettingsMenu() {
+        settingsWindow.showAndWait();
+
+        if (settingsWindow.isApplyNewSettings()) {
+            System.out.println("New settings have been applied");
+        }
     }
 
     private GridPane createGameBoard() {
@@ -62,22 +90,35 @@ public class TicTacToe extends Application {
         Tile clickedTile = (Tile) actionEvent.getSource();
         int clickedRow = clickedTile.getRow();
         int clickedCol = clickedTile.getCol();
-
         playMoveForHumanPlayer(clickedRow, clickedCol);
-
-        // Start the animation
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.25), event -> {}));
-        timeline.setOnFinished(event -> {
-            Platform.runLater(() -> playAiAfterAnimation());
-        });
-        timeline.play();
+        playAiWithDelay();
     }
 
-    private void playAiAfterAnimation() {
-        playAi();
-        if (gameController.isGameOver()) {
-            displayGameOverMessage();
+    private void playAi() {
+        if (!gameController.isGameOver()) {
+            Move playedMove = gameController.playMoveForBotPlayer();
+            if (playedMove != null) {
+                tiles[playedMove.getRow()][playedMove.getCol()].setMarker(gameController.getCurrentPlayer().getMarker());
+                if (gameController.hasWinner() != null) {
+                    showWinningTiles();
+                }
+                gameController.switchPlayer();
+            }
         }
+    }
+
+    private void playAiWithDelay() {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.3), event -> {
+        }));
+        timeline.setOnFinished(event -> {
+            Platform.runLater(() -> {
+                playAi();
+                if (gameController.isGameOver()) {
+                    displayGameOverMessage();
+                }
+            });
+        });
+        timeline.play();
     }
 
     private void displayGameOverMessage() {
@@ -107,20 +148,9 @@ public class TicTacToe extends Application {
                 tiles[row][col].resetTile(this::handleTileClick);
             }
         }
+        playAiWithDelay();
     }
 
-    private void playAi() {
-        if (!gameController.isGameOver()) {
-            Move playedMove = gameController.playMoveForBotPlayer();
-            if (playedMove != null) {
-                tiles[playedMove.getRow()][playedMove.getCol()].setMarker(gameController.getCurrentPlayer().getMarker());
-                if (gameController.hasWinner() != null) {
-                    showWinningTiles();
-                }
-                gameController.switchPlayer();
-            }
-        }
-    }
 
     private void playMoveForHumanPlayer(int clickedRow, int clickedCol) {
         if (!gameController.isGameOver()) {
@@ -144,4 +174,12 @@ public class TicTacToe extends Application {
         }
     }
 
+    private void showMove() {
+        if (!gameController.isGameOver()) {
+            Move playedMove = gameController.getBestMove();
+            if (playedMove != null) {
+                tiles[playedMove.getRow()][playedMove.getCol()].setHelperStyle();
+            }
+        }
+    }
 }

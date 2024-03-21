@@ -20,9 +20,12 @@ public class Game {
     }
 
     public Move playMoveForBotPlayer() {
-        Move move = currentPlayer.selectMove(board);
-        if (move != null) {
-            board.makeMove(move, currentPlayer.getMarker());
+        Move move = null;
+        if (!(currentPlayer instanceof HumanPlayer)) {
+            move = currentPlayer.selectMove(board);
+            if (move != null) {
+                board.makeMove(move, currentPlayer.getMarker());
+            }
         }
         return move;
     }
@@ -37,6 +40,11 @@ public class Game {
                 board.makeMove(move, currentPlayer.getMarker());
         }
         return move;
+    }
+
+    public Move getBestMove() {
+        Player miniMax = new MiniMaxBot(currentPlayer.getMarker());
+        return miniMax.selectMove(board);
     }
 
 
@@ -85,4 +93,6 @@ public class Game {
                 ", player2=" + player2 +
                 '}';
     }
+
+
 }

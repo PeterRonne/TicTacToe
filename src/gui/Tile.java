@@ -35,16 +35,16 @@ public class Tile extends Button {
     }
 
     public void setBaseStyle() {
-        this.setStyle("-fx-font-size:45; -fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-width: 2px; -fx-border-radius: 0px;");
+        this.setStyle("-fx-font-size:45; -fx-background-color: #ffffff; -fx-border-color: #000000; -fx-border-width: 1px; -fx-border-radius: 3px;");
     }
 
     public void setWinningStyle() {
-        this.setStyle("-fx-font-size:45; -fx-background-color: #7AE582; -fx-border-color: #000000; -fx-border-width: 2px; -fx-border-radius: 0px;");
+        this.setStyle("-fx-font-size:45; -fx-background-color: #7AE582; -fx-border-color: #000000; -fx-border-width: 1px; -fx-border-radius: 3px;");
     }
-//
-//    public void setHelperStyle() {
-//        this.setStyle("-fx-font-size:45; -fx-background-color: #00A5CF; -fx-border-color: #000000; -fx-border-width: 2px; -fx-border-radius: 0px;");
-//    }
+
+    public void setHelperStyle() {
+        this.setStyle("-fx-font-size:45; -fx-background-color: #00A5CF; -fx-border-color: #000000; -fx-border-width: 1px; -fx-border-radius: 3px;");
+    }
 
     public Marker getMarker() {
         return marker;
