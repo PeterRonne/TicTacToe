@@ -45,7 +45,7 @@ public class SettingsWindow extends Stage {
         pane.setHgap(50);
         pane.setVgap(10);
 
-        String Players[] = {"Human", "OneLayerBot", "MiniMaxBot"};
+        String Players[] = {"Human", "RandomBot", "OneLayerBot", "TwoLayerBot", "MiniMaxBot"};
         Marker markers[] = {Marker.X, Marker.O};
 
         //Player One
@@ -144,7 +144,6 @@ public class SettingsWindow extends Stage {
         applyNewSettings = false;
         close();
     }
-
 
     private void applySettingsAction() {
         System.out.println("PlayerOne: " + playerOneType + " " + playerOneMarker);

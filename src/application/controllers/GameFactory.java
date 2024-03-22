@@ -28,4 +28,13 @@ public class GameFactory {
         return oneLayerBot;
     }
 
+    public Player createRandomBot(Marker marker) {
+        Player randomBot = new RandomBot(marker);
+        return randomBot;
+    }
+
+    public Player createTwoLayerBot(Marker marker) {
+        Player twoLayerBot = new TwoLayerBot(marker);
+        return twoLayerBot;
+    }
 }

@@ -19,4 +19,9 @@ public class RandomBot extends Player {
         ArrayList<Move> candidates = board.getLegalMoves();
         return candidates.get(random.nextInt(candidates.size()));
     }
+
+    @Override
+    public String toString() {
+        return "RandomBot " + super.getMarker();
+    }
 }

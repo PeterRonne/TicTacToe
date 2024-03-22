@@ -29,8 +29,14 @@ public class GameController {
             case "Human":
                 player = gameFactory.createHumanPlayer(marker);
                 break;
+            case "RandomBot":
+                player = gameFactory.createRandomBot(marker);
+                break;
             case "OneLayerBot":
                 player = gameFactory.createOneLayerBot(marker);
+                break;
+            case "TwoLayerBot":
+                player = gameFactory.createTwoLayerBot(marker);
                 break;
             case "MiniMaxBot":
                 player = gameFactory.createMiniMaxBot(marker);
